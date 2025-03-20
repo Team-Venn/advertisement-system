@@ -1,17 +1,23 @@
+// import { Router } from "express";
+// import { loginUser, logoutUser, registerUser } from "../controllers/consumer-controller.js";
+// import { authenticate } from "../middlewares/auth.middleware.js";
+
 import { Router } from "express";
-import { consumerValidator } from "../validators/consumer-validators.js";
-import { loginConsumer, logoutConsumer, registerConsumer } from "../controllers/consumer-controller.js";
+import { loginUser, logoutUser, registerUser, verifyEmail } from "../controllers/consumer-controller.js";
+import { profileImageUpload } from "../middlewares/upload.js";
 import { authenticate } from "../middlewares/auth.middleware.js";
 
 
 
+const userRouter = Router();
 
-const consumerRouter = Router();
+// User Authentication Routes
+userRouter.post('/users/register', profileImageUpload.single('profilePicture'), registerUser);
 
-consumerRouter.post('/consumers/register', consumerValidator, registerConsumer);
+userRouter.post('/users/verify-email', verifyEmail);
 
-consumerRouter.post('/consumers/login', loginConsumer);
+userRouter.post('/users/login', loginUser);
 
-consumerRouter.post('/consumers/logout', authenticate, logoutConsumer);
+userRouter.post('/logout', authenticate, logoutUser);
 
-export default consumerRouter;
+export default userRouter;
