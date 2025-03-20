@@ -1,23 +1,54 @@
 import { Schema, model } from "mongoose";
 import normalize from 'normalize-mongoose';
 
-const consumerSchema = new Schema({
-
-    fullName: {
+const userSchema = new Schema({
+    email: {
         type: String,
-        unique: true
+        required: true,
     },
-    username : {
+    username: {
         type: String,
-        unique: true
+        unique: true,
+        required: true,
     },
-    password : {
+    password: {
+        type: String,
+        required: true,
+    },
+    role: {
+        type: String,
+        enum: ['vendor', 'consumer'],
+        required: true
+    },
+    // Vendor specific fields
+    shopName: {
+        type: String,
+        required: function() { return this.role === 'vendor'; },
+    },
+    whatsappContact: {
+        type: String,
+        required: function() { return this.role === 'vendor'; },
+    },
+    openHours: {
+        type: String,
+        required: function() { return this.role === 'vendor'; },
+    },
+    profilePicture: {
         type: String
+    },
+    // adverts : [{ type: Schema.Types.ObjectId, ref: 'advert' }]
+    verificationCode: {
+        type: String, 
+        required: true,
+    },
+    verified: {
+        type: Boolean,
+        default: false,
     }
-},{
+}, {
     timestamps: true
-})
+});
 
-consumerSchema.plugin(normalize);
+userSchema.plugin(normalize);
 
-export const ConsumerModel = model('Consumer', consumerSchema);
+export const UserModel = model('User', userSchema);

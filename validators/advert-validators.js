@@ -1,9 +1,11 @@
 import Joi from "joi";
+import joiObjectid from "joi-objectid";
 
-
-
+const JoiObjectId = joiObjectid(Joi);
 
 export const advertValidator = Joi.object({
+    
+    vendorId: JoiObjectId().required(),
     
     foodname: Joi.string().required(),
 
@@ -11,7 +13,7 @@ export const advertValidator = Joi.object({
 
     price: Joi.number().required(),
 
-    image: Joi.string().required(),
+    pictures :Joi.array().items(Joi.string().required()),
 
-    category:Joi.string().required(),
+    category: Joi.string().valid('local', 'continental', 'drinks', 'desserts').required()
 });

@@ -7,3 +7,10 @@ export const profileImageUpload = multer({
       relativePath: "/vennace./profile-images/*",
     }),
   });
+
+  export const advertImageUpload = multer({
+    storage: multerSaveFilesOrg({
+      apiAccessToken: process.env.SAVEFILESORG_API_KEY,
+      relativePath: "/vennace./advert-images/*",
+    }),
+  });
