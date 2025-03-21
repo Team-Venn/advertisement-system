@@ -1,31 +1,46 @@
 // import jwt from 'jsonwebtoken';
 import { expressjwt } from "express-jwt";
-
+import { UserModel } from "../models/consumer-models.js";
 
 export const authenticate = expressjwt({
-    secret: process.env.JWT_SECRET,
-    algorithms: ['HS256'],
+  secret: process.env.JWT_SECRET,
+  algorithms: ["HS256"],
 
-    getToken: function fromHeaderOrQuerystring(req) {
-        if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-            return req.headers.authorization.split(' ')[1];
-        } else if (req.query && req.query.token) {
-            return req.query.token;
-        }
-        return null;
+  getToken: function fromHeaderOrQuerystring(req) {
+    if (
+      req.headers.authorization &&
+      req.headers.authorization.split(" ")[0] === "Bearer"
+    ) {
+      return req.headers.authorization.split(" ")[1];
+    } else if (req.query && req.query.token) {
+      return req.query.token;
     }
+    return null;
+  },
 });
 
-
+export const isAuthorized = (roles) => {
+  return async (req, res, next) => {
+    // find user by id
+    const user = await UserModel.findById(req.auth.id);
+    // check if roles includes user roles
+    if (roles?.includes(user.role)) {
+      next();
+    } else {
+      res.status(403).json("You are not authorized");
+    }
+  };
+};
 
 // Create an error handler for auth errors
 export const handleAuthError = (err, req, res, next) => {
-if (err.name === 'UnauthorizedError') {
-    return res.status(401).json({ message: 'Authentication required. Please log in.' });
-}
-next(err);
+  if (err.name === "UnauthorizedError") {
+    return res
+      .status(401)
+      .json({ message: "Authentication required. Please log in." });
+  }
+  next(err);
 };
-
 
 // export const authenticate = (req, res, next) => {
 //     const authorization = req.headers.authorization;
