@@ -4,7 +4,6 @@ import cors from "cors";
 import vennaceRouter from "./routes/advert-routes.js";
 import userRouter from "./routes/consumer-routes.js";
 
-
 // Database Connection
 async function connectToDatabase() {
   try {
@@ -26,11 +25,11 @@ app.use(cors());
 
 //using routes
 // app.use("/api/v1", vendorRouter);
-app.use('/api/v1', userRouter);
-app.use('/api/v1', vennaceRouter);
-
-
+app.use("/api/v1", userRouter);
+app.use("/api/v1", vennaceRouter);
 
 app.listen(port, () => {
   console.log(`Server is listeing on ${port}`);
 });
+
+// example link : https://wa.link/vr324s
