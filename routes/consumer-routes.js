@@ -7,6 +7,7 @@ import {
   loginUser,
   logoutUser,
   registerUser,
+  userProfile,
   verifyEmail,
 } from "../controllers/consumer-controller.js";
 import { profileImageUpload } from "../middlewares/upload.js";
@@ -26,5 +27,7 @@ userRouter.post("/users/verify-email", verifyEmail);
 userRouter.post("/users/login", loginUser);
 
 userRouter.post("/logout", authenticate, logoutUser);
+
+userRouter.patch('/update-user-profile/:id', authenticate, profileImageUpload.single("profilePicture"), userProfile);
 
 export default userRouter;
