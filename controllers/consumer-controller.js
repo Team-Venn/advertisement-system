@@ -1,5 +1,6 @@
 import {
   loginUserValidator,
+  profileValidator,
   userValidator,
 } from "../validators/consumer-validators.js";
 import { UserModel } from "../models/consumer-models.js";
@@ -125,6 +126,30 @@ export const loginUser = async (req, res) => {
   // Respond with the Token
   res.status(200).json({ message: "Login Successful", token });
 };
+
+export const userProfile = async (req, res, next) => {
+    try {
+      const { error, value } = profileValidator.validate(
+        {
+          ...req.body,
+      profilePicture: req.file?.filename,
+        },
+        {
+          abortEarly: false,
+        }
+      );
+      if (error) {
+        return res.status(422).json(error);
+      }
+  
+      const profile = await UserModel.findByIdAndUpdate(req.params.id, value, {
+        new: true,
+      });
+      res.status(200).json({ message: "Profile Updated !", profile });
+    } catch (error) {
+      next(error);
+    }
+}
 
 // User Logout
 export const logoutUser = async (req, res) => {

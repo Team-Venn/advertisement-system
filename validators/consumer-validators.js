@@ -16,3 +16,9 @@ export const loginUserValidator = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().required(),
 });
+
+export const profileValidator = Joi.object({
+  socialMediaLink: Joi.string().optional(),
+  openHours: Joi.string().optional(),
+  profilePicture: Joi.string().optional(),
+})
