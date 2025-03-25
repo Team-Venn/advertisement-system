@@ -124,7 +124,7 @@ export const loginUser = async (req, res) => {
   });
 
   // Respond with the Token
-  res.status(200).json({ message: "Login Successful", token });
+  res.status(200).json({ message: "Login Successful", token , user: {id:user.id, role: user.role}});
 };
 
 export const userProfile = async (req, res, next) => {
