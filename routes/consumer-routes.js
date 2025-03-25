@@ -4,6 +4,7 @@
 
 import { Router } from "express";
 import {
+  getAuthenticatedUser,
   loginUser,
   logoutUser,
   registerUser,
@@ -25,6 +26,8 @@ userRouter.post(
 userRouter.post("/users/verify-email", verifyEmail);
 
 userRouter.post("/users/login", loginUser);
+
+userRouter.get('/users/me', authenticate, getAuthenticatedUser);
 
 userRouter.post("/logout", authenticate, logoutUser);
 

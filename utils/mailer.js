@@ -2,7 +2,7 @@ import nodemailer from "nodemailer";
 
 // create a nodemailer transporter
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
   port: 587,
   secure: false,
   auth: {
@@ -16,7 +16,6 @@ export const sendVerificationEmail = async (to, verificationCode, username) => {
     from: `"Vennace" <${process.env.USER_EMAIL}>`,
     to: to,
     subject: "Email Verification",
-    text: `Your verification code is ${verificationCode}`,
     html: `<!DOCTYPE html>
          <html lang="en">
           <head>

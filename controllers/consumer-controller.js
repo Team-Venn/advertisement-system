@@ -59,7 +59,7 @@ export const registerUser = async (req, res, next) => {
       Message: value.shopName
         ? `Welcome ${value.shopName} to Vennace, Please verify your email.`
         : `Welcome ${value.username} to Vennace, Please verify your email.`,
-      data: newUser,
+       data: newUser,
     });
   } catch (error) {
     next(error);
@@ -124,7 +124,20 @@ export const loginUser = async (req, res) => {
   });
 
   // Respond with the Token
-  res.status(200).json({ message: "Login Successful", token });
+  res.status(200).json({ message: "Login Successful", token , user: {id:user.id, role: user.role}});
+};
+
+export const getAuthenticatedUser = async (req, res, next) => {
+  try {
+    // Get user by Id using req.auth.id
+    const result = await UserModel.findById(req.auth.id).select({
+      password: false, verificationCode: false
+    });
+    // return response
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
 };
 
 export const userProfile = async (req, res, next) => {
@@ -142,8 +155,10 @@ export const userProfile = async (req, res, next) => {
         return res.status(422).json(error);
       }
   
-      const profile = await UserModel.findByIdAndUpdate(req.params.id, value, {
+      const profile = await UserModel.findByIdAndUpdate(req.auth.id, value, {
         new: true,
+      }).select({
+        password: false, verificationCode: false
       });
       res.status(200).json({ message: "Profile Updated !", profile });
     } catch (error) {
