@@ -5,6 +5,7 @@ import {
   getAdvertById,
   getAdverts,
   getVendorAdverts,
+  getVendorAdvertsById,
   postAdvert,
   replaceAdvert,
   updateAdvert,
@@ -42,6 +43,8 @@ vennaceRouter.get(
   isAuthorized(["consumer"]),
   getAdvertById
 );
+
+vennaceRouter.get('/vendor-advert/:id', authenticate, isAuthorized(["vendor"]), getVendorAdvertsById)
 
 vennaceRouter.patch(
   "/adverts/:id",
