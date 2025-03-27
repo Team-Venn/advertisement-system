@@ -78,6 +78,28 @@ export const getVendorAdverts = async (req, res, next) => {
   }
 };
 
+export const getVendorAdvertsById = async (req, res, next) => {
+  try {
+    // // Make sure the user is authenticated
+    if (!req.auth || !req.auth.id) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    // Extract the vendor's ID from the authenticated user
+    const vendorId = req.auth.id;
+
+    // Fetch all adverts for the specific vendor and populate vendor data
+    const adverts = await AdvertModel.findOne({ vendorId, _id:req.params.id }) // Filter by vendorId
+      // .populate("vendorId", "profilePicture shopName socialMediaLink openHours")
+      // .exec();
+
+    // Return the adverts and the total count
+    res.status(200).json({ adverts});
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const getAdvertById = async (req, res, next) => {
   try {
     const advert = await AdvertModel.findById(req.params.id, req.body);
